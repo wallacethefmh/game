@@ -4,7 +4,16 @@ define([
   'use strict';
 
   var User = Model.extend({
-    // This model is intentionally left blank
+    defaults: {
+      name: 'dude'
+    }
+
+    ,initialize: function(attributes, options) {
+     Model.prototype.initialize.apply(this, arguments);
+     console.debug('HelloWorld#initialize');
+     console.debug('arguments');
+     console.debug(arguments);
+    }
   });
 
   return User;

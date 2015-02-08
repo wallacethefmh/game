@@ -1,14 +1,14 @@
 define([
   'views/base/view',
-  'text!templates/hello-world.hbs'
+  'text!templates/user.hbs'
 ], function(View, template) {
   'use strict';
 
-  var HelloWorldView = View.extend({
+  var UserView = View.extend({
     // Automatically render after initialize
     autoRender: true,
 
-    className: 'hello-world',
+    className: 'user-view',
 
     // Save the template string in a prototype property.
     // This is overwritten with the compiled template function.
@@ -16,5 +16,5 @@ define([
     template: template
   });
 
-  return HelloWorldView;
+  return UserView;
 });
