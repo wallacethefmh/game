@@ -1,9 +1,8 @@
 define([
   'views/base/view',
   'text!templates/user.hbs',
-  'lib/three.js',
-  'lib/utils'
-], function(View, template, Three, Utils) {
+  'three'
+], function(View, template, THREE) {
   'use strict';
 
   var UserView = View.extend({
@@ -25,8 +24,6 @@ define([
       console.log(template);
       console.log('three:');
       console.log(Three);
-      console.log('utils:');
-      console.log(Utils);
 
       // var scene = new THREE.Scene();
       // var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
