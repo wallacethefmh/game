@@ -1,7 +1,7 @@
 define([
   'views/base/view',
   'text!templates/user.hbs',
-  'three'
+  'lib/three'
 ], function(View, template, THREE) {
   'use strict';
 
