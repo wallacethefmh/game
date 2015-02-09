@@ -12,6 +12,7 @@ define([
         model: this.model,
         region: 'main'
       });
+      this.view.makeCube();
     }
   });
 
