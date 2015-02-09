@@ -17,13 +17,6 @@ define([
     template: template,
 
     makeCube: function() {
-      
-      // console.log('view:');
-      // console.log(View);
-      // console.log('template:');
-      // console.log(template);
-      // console.log('three:');
-      // console.log(Three);
 
       var scene = new THREE.Scene();
       var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
