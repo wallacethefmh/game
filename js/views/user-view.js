@@ -18,8 +18,11 @@ define([
 
     makeCube: function() {
       
-      console.log('here');
-      console.log('where is three undefined');
+      console.log('view:');
+      console.log(View);
+      console.log('template:');
+      console.log(template);
+      console.log('three:');
       console.log(THREE);
 
       var scene = new THREE.Scene();
