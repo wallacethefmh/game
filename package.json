@@ -1,13 +1,12 @@
 {
-  "name": "kateboyd",
+  "name": "Blork",
   "version": "0.0.1",
-  "description": "Kate Boyd's portfolio",
+  "description": "This is blork",
   "author": "Will Boyd",
   "license": "BSD-2-Clause",
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-less": "^0.11.0",
-    "grunt-contrib-cssmin": "^0.9.0"
   }
 }
