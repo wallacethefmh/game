@@ -100,8 +100,8 @@ define([
 
         if (target) {
 
-          console.log(mesh);
-          console.log(mouse);
+          //console.log(mesh);
+          //console.log(mouse);
           targetRaycaster.set(mesh, mouse);
           mesh.position.x += 25 * targetRaycaster.ray.direction.x;
           mesh.position.y += 25 * targetRaycaster.ray.direction.y;
@@ -113,15 +113,31 @@ define([
       }
 
       function initEnvironment() {
-        var texture = THREE.ImageUtils.loadTexture( "assets/images/terrain-marble.jpg" );
+        var maxAnisotropy = renderer.getMaxAnisotropy();
+        
+        // GROUND
+        var texture = THREE.ImageUtils.loadTexture( "assets/images/textures/terrain-marble.jpg" );
         var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
-       // texture.anisotropy = maxAnisotropy;
+        texture.anisotropy = maxAnisotropy;
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set( 512, 512 );
 
-        var geometry = new THREE.PlaneBufferGeometry( 100, 100 );
-        var plane = new THREE.Mesh( geometry, material );
-        scene.add( plane );
+        var geometry = new THREE.PlaneBufferGeometry( 100, 100, 32 );
+        var planeMesh = new THREE.Mesh( geometry, material );
+        planeMesh.scale.set( 1000, 1000, 1000 );
+        scene.add( planeMesh );
+
+        // LIGHTING
+        scene.add( new THREE.AmbientLight( 0xeef0ff ) );
+
+        //var light = new THREE.DirectionalLight( 0xffffff, 2 );
+        //light.position.set( 1, 1, 1 );
+        //scene.add( light );
+        
+        var light = new THREE.PointLight( 0xFFFFFF, 1, 1000 );
+        light.position.set( 0, 0, 500 );
+        scene.add( light );
+
       }
 
       animate();
