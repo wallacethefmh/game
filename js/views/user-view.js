@@ -1,15 +1,15 @@
 define([
   'views/base/view',
-  'text!templates/user.hbs',
+  'text!templates/Game.hbs',
   'three'
 ], function(View, template, THREE) {
   'use strict';
 
-  var UserView = View.extend({
+  var GameView = View.extend({
     // Automatically render after initialize
     autoRender: true,
 
-    className: 'user-view',
+    className: 'Game-view',
 
     // Save the template string in a prototype property.
     // This is overwritten with the compiled template function.
@@ -19,7 +19,12 @@ define([
     makeCube: function() {
 
       var scene = new THREE.Scene();
-      var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+      var width = window.innerWidth;
+      var height = window.innerHeight;
+
+      camera = new THREE.OrthographicCamera( 0.5 * SCREEN_WIDTH / - 2, 0.5 * SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_HEIGHT / - 2, 150, 1000 );
+      camera.position.z = 2500;
 
       var renderer = new THREE.WebGLRenderer();
       renderer.setSize( window.innerWidth, window.innerHeight );
@@ -35,15 +40,31 @@ define([
       var render = function () {
         requestAnimationFrame( render );
 
-        cube.rotation.x += 0.1;
-        cube.rotation.y += 0.1;
+        cube.rotation.x += 0.03;
+        cube.rotation.y += 0.03;
+
+        cube.position.x += 0.01;
+        cube.position.y += 0.005;
+
 
         renderer.render(scene, camera);
       };
 
-      render();
+      function onWindowResize( event ) {
+
+        SCREEN_WIDTH = window.innerWidth;
+        SCREEN_HEIGHT = window.innerHeight;
+
+        renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+
+        camera.aspect = 0.5 * SCREEN_WIDTH / SCREEN_HEIGHT;
+        camera.updateProjectionMatrix();
+
+      }
+
+      console.log(cube);
     }
   });
 
-  return UserView;
+  return GameView;
 });

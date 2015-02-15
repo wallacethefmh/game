@@ -3,7 +3,7 @@ define([
 ], function(Model) {
   'use strict';
 
-  var User = Model.extend({
+  var Game = Model.extend({
     defaults: {
       name: 'dude'
     }
@@ -16,5 +16,5 @@ define([
     // }
   });
 
-  return User;
+  return Game;
 });

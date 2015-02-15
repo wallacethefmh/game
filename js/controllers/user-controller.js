@@ -1,14 +1,14 @@
 define([
   'controllers/base/controller',
-  'models/user',
-  'views/user-view'
-], function(Controller, User, UserView) {
+  'models/Game',
+  'views/Game-view'
+], function(Controller, Game, GameView) {
   'use strict';
 
-  var UserController = Controller.extend({
+  var GameController = Controller.extend({
     show: function(params) {
-      this.model = new User();
-      this.view = new UserView({
+      this.model = new Game();
+      this.view = new GameView({
         model: this.model,
         region: 'main'
       });
@@ -16,5 +16,5 @@ define([
     }
   });
 
-  return UserController;
+  return GameController;
 });

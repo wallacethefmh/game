@@ -11,9 +11,6 @@ define(['chaplin'], function(Chaplin) {
       var args = [].slice.call(arguments);
       // You can fetch some data here and start app
       // (by calling supermethod) after that.
-
-      console.log('application.js arguments:');
-      console.log(args);
       Chaplin.Application.prototype.start.apply(this, args);
     }
   });
