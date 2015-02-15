@@ -33,6 +33,8 @@ define([
       renderer.domElement.style.position = "relative";
       document.body.appendChild( renderer.domElement );
 
+      initEnvironment();
+
       var mesh = new THREE.Mesh( new THREE.SphereGeometry( 31, 14, 14 ), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: true } ) );
       mesh.position.x = 100;
       mesh.position.y = -100;
@@ -97,9 +99,10 @@ define([
         mesh2.rotation.y -= 0.009;
 
         if (target) {
+
+          console.log(mesh);
+          console.log(mouse);
           targetRaycaster.set(mesh, mouse);
-          console.log(targetRaycaster.ray.direction.x);
-          console.log(targetRaycaster.ray.direction.y);
           mesh.position.x += 25 * targetRaycaster.ray.direction.x;
           mesh.position.y += 25 * targetRaycaster.ray.direction.y;
           target = false;
@@ -107,6 +110,18 @@ define([
 
         renderer.render( scene, camera );
 
+      }
+
+      function initEnvironment() {
+        var texture = THREE.ImageUtils.loadTexture( "assets/images/terrain-marble.jpg" );
+        var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
+       // texture.anisotropy = maxAnisotropy;
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set( 512, 512 );
+
+        var geometry = new THREE.PlaneBufferGeometry( 100, 100 );
+        var plane = new THREE.Mesh( geometry, material );
+        scene.add( plane );
       }
 
       animate();
