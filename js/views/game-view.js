@@ -33,6 +33,10 @@ define([
       renderer.domElement.style.position = "relative";
       document.body.appendChild( renderer.domElement );
 
+      // ENVIRONMENT VARS
+      var ground,
+          maxAnisotropy = renderer.getMaxAnisotropy(),
+          userProjectiles = [];
       initEnvironment();
 
       var mesh = new THREE.Mesh( new THREE.SphereGeometry( 31, 14, 14 ), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: true } ) );
@@ -102,18 +106,49 @@ define([
 
           //console.log(mesh);
           //console.log(mouse);
-          targetRaycaster.set(mesh, mouse);
-          mesh.position.x += 25 * targetRaycaster.ray.direction.x;
-          mesh.position.y += 25 * targetRaycaster.ray.direction.y;
           target = false;
+          targetRaycaster.setFromCamera(mouse, camera);
+          var clickTarget = targetRaycaster.intersectObject(ground)[0];
+
+          // console.log(clickTarget.point.normalize());
+          // console.log(clickTarget.point);
+          // var projectileRay = new THREE.Ray(mesh.position, clickTarget.point.multiplyScalar(1000).normalize());
+          // console.log(clickTarget.point.multiplyScalar(1000));
+          // console.log(clickTarget.point);
+          // console.log(projectileRay.origin);
+          // console.log(projectileRay.direction);
+
+          var lastX = mesh.position.x;
+          var lastY = mesh.position.y;
+
+          var geometry = new THREE.Geometry();
+          geometry.vertices.push(
+            new THREE.Vector3( lastX, lastY, 0 ),
+            clickTarget.point
+          );
+
+          var line = new THREE.Line( geometry );
+          
+          scene.add( line );
+
+          var a = new ClickProjectile();
+          a.init(mesh, line.geometry.vertices[1], line.geometry.vertices[0]);
+          userProjectiles.push(a);
+
         }
+
+        for (var i = userProjectiles.length - 1; i >= 0; i--) {
+          if (userProjectiles[i].finished) userProjectiles.splice(i, 1);
+        };
+        for (var i = userProjectiles.length - 1; i >= 0; i--) {
+          userProjectiles[i].render();
+        };       
 
         renderer.render( scene, camera );
 
       }
 
       function initEnvironment() {
-        var maxAnisotropy = renderer.getMaxAnisotropy();
         
         // GROUND
         var texture = THREE.ImageUtils.loadTexture( "assets/images/textures/terrain-marble.jpg" );
@@ -123,21 +158,63 @@ define([
         texture.repeat.set( 512, 512 );
 
         var geometry = new THREE.PlaneBufferGeometry( 100, 100, 32 );
-        var planeMesh = new THREE.Mesh( geometry, material );
-        planeMesh.scale.set( 1000, 1000, 1000 );
-        scene.add( planeMesh );
+        
+        ground = new THREE.Mesh( geometry, material );
+        ground.scale.set( 3000, 3000, 3000 );
+        scene.add( ground );
 
         // LIGHTING
         scene.add( new THREE.AmbientLight( 0xeef0ff ) );
-
-        //var light = new THREE.DirectionalLight( 0xffffff, 2 );
-        //light.position.set( 1, 1, 1 );
-        //scene.add( light );
         
         var light = new THREE.PointLight( 0xFFFFFF, 1, 1000 );
         light.position.set( 0, 0, 500 );
         scene.add( light );
 
+      }
+
+      var ClickProjectile = function() {
+        this.initialSpeed = 40;
+        this.count = 0;
+        this.speed = this.initialSpeed;
+        this.mesh;
+        this.destination;
+        this.destNorm;
+        this.movedX = 0;
+        this.movedY = 0;
+        this.lastLog = 0;
+        this.init = function(mesh, finish, start) {
+          this.mesh = mesh;
+          this.destination = new THREE.Vector3();
+          this.destination.subVectors(finish, start);
+          this.destNorm = this.destination.clone().normalize();
+          this.count = 0;
+        }
+        this.render = function() {
+
+          
+          this.speed = 2 + 9 * (this.count) - 4.9 * Math.pow(this.count, 2);
+          console.log(this.speed);
+
+
+          this.count += 1;
+          if (this.count > 1000) this.destroy();
+          
+          this.mesh.position.x += this.destNorm.x * this.speed;
+          this.mesh.position.y += this.destNorm.y * this.speed;
+          
+          this.movedX += Math.abs(this.destNorm.x * this.speed);
+          this.movedY += Math.abs(this.destNorm.y * this.speed);
+
+          if (this.movedX > Math.abs(this.destination.x)) this.destroy();
+          // console.log('xdiff: ' . xdiff);
+          // console.log('ydiff: ' . ydiff);
+          // if ((xdiff < 2 && xdiff > -2) && (ydiff < 2 && ydiff > -2)) this.detroy();
+          // if (Math.abs(this.mesh.position.x) > Math.abs(this.destination.x) 
+          //   || Math.abs(this.mesh.position.y) > Math.abs(this.destination.y) ) this.destroy();
+        }
+        this.destroy = function() {
+          this.finished = 1;
+        }
       }
 
       animate();
